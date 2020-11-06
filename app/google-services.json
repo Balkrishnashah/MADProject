@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "37580205254",
+    "firebase_url": "https://android-mvvm-974af.firebaseio.com",
+    "project_id": "android-mvvm-974af",
+    "storage_bucket": "android-mvvm-974af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37580205254:android:d1e334195dab02c807fbc7",
+        "android_client_info": {
+          "package_name": "com.balkrishnashah.firebasechatmessenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37580205254-6srubmjped05l0cge1pa43n9m9g5hg1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUVJIhu8GHCl1cFUgGdnF3Ucebml8917A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "37580205254-6srubmjped05l0cge1pa43n9m9g5hg1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

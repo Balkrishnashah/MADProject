@@ -7,4 +7,32 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#536DFE</color>
+    <color name="color_orange">#D84315</color>
+    <color name="colorwhite">#fff</color>
+    <color name="colorblack">#000</color>
+    <color name="colorTransparent">#F8F9FA</color>
+    <color name="blackgrey">#262938</color>
+    <color name="colordark">#181A24</color>
+    <color name="newcolorAccent">#ff4681</color>
+    <color name="colorgreen">#0EF117</color>
+    <color name="blue_bg">#120440</color>
+    <color name="new_blue">#ffffff</color>
+    <color name="yellow_color">#FDDB01</color>
+    <color name="gold_color">#fed501</color>
+    <color name="school_title_color">#021D49</color>
+    <color name="fees_background_color">#ed3b3b</color>
+    <color name="underline_color">#F57C00</color>
+    <color name="blue">#020A45</color>
+    <color name="theme_color1">#ffe97425</color>
+
+    //
+    <color name="clr_otp_bg">#535288</color>
+    <color name="clr_otp_btn_yellow">#F8CD06</color>
+    <color name="clr_white_text">#FFFFFF</color>
+    <color name="clr_grey_text">#D3D3D3</color>
+    <color name="clr_grey_text_transparent">#80D3D3D3</color>
+
 </resources>
