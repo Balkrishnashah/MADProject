@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -34,26 +38,31 @@ public class VerifyPhoneNumber extends AppCompatActivity {
 
     private String mVerification;
     private FirebaseAuth mAuth;
-    private EditText mCode1,mCode2,mCode3,mCode4,mCode5,mCode6,mCode;
+    private EditText mCode1,mCode2,mCode3,mCode4,mCode5,mCode6;
+    private TextView mPhone_no;
+    ProgressBar mProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone_number);
 
         mAuth=FirebaseAuth.getInstance();
-        mCode = findViewById(R.id.otp);
         mCode1=findViewById(R.id.otp_1);
         mCode2 = findViewById(R.id.otp_2);
         mCode3 = findViewById(R.id.otp_3);
         mCode4 = findViewById(R.id.otp_4);
         mCode5 = findViewById(R.id.otp_5);
         mCode6 = findViewById(R.id.otp_6);
+        mPhone_no = findViewById(R.id.phone_no_ID);
+        mProgressBar = findViewById(R.id.pBar);
 
 //        Toast.makeText(getApplicationContext(), "otp is : "+mCode1.getText().toString()+mCode2.getText().toString()+mCode3.getText().toString()+mCode4.getText().toString()+mCode5.getText().toString()+mCode6.getText().toString(),Toast.LENGTH_LONG).show();
         Intent intent = getIntent();
         String mobile = intent.getStringExtra("mobile");
-        Toast.makeText(getApplicationContext(),"mobile is" + mobile,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"mobile is" + mobile,Toast.LENGTH_SHORT).show();
+        mPhone_no.setText("+91"+mobile);
         sendVerificationCode(mobile);
+
     }
 
     public void sendVerificationCode(String number) {
@@ -83,8 +92,27 @@ public class VerifyPhoneNumber extends AppCompatActivity {
 
                 List<String> code_break = Collections.singletonList(code);
                 Toast.makeText(getApplicationContext(), "codebreak "+code_break, Toast.LENGTH_SHORT).show();
-                mCode.setText(code);
-                verifyCode(code);
+//                mCode.setText(code);
+                int size = 1;
+                String[] tokens = code.split("(?<=\\G.{" + size + "})");
+//                System.out.println(Arrays.toString(tokens));
+                mCode1.setText(tokens[0]);
+                mCode2.setText(tokens[1]);
+                mCode3.setText(tokens[2]);
+                mCode4.setText(tokens[3]);
+                mCode5.setText(tokens[4]);
+                mCode6.setText(tokens[5]);
+//                verifyCode(code);
+                findViewById(R.id.verify_otp_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        findViewById(R.id.verification_text).setVisibility(View.VISIBLE);
+                        findViewById(R.id.verify_otp_btn).setVisibility(View.GONE);
+                        if (mCode1.length() !=0 && mCode3.length() !=0 && mCode3.length() !=0 && mCode4.length() !=0 && mCode5.length() !=0 && mCode6.length() !=0)
+                            verifyCode(code);
+                    }
+                });
             }
         }
 
@@ -99,7 +127,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     public void verifyCode(String code){
         try{
             PhoneAuthCredential credential= PhoneAuthProvider.getCredential(mVerification,code);
-//            signInWithPhone(credential);
+            signInWithPhone(credential);
         }catch (Exception e){
             Toast toast = Toast.makeText(getApplicationContext(), "Verification Code is wrong, try again", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
@@ -114,18 +142,21 @@ public class VerifyPhoneNumber extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             if (user != null) {
-                                final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
+                                final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference("ChatMessenger").child("user").child(user.getUid());
                                 mUserDB.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         if (!snapshot.exists()) {
                                             Map<String, Object> userMap = new HashMap<>();
                                             userMap.put("phone", user.getPhoneNumber());
-                                            userMap.put("name", user.getPhoneNumber());
+                                            userMap.put("name", user.getDisplayName());
                                             mUserDB.updateChildren(userMap);
                                         }
+                                        mProgressBar.setVisibility(View.GONE);
+                                        findViewById(R.id.verification_text).setVisibility(View.GONE);
 
                                         Intent intent = new Intent(VerifyPhoneNumber.this, ChatLogActivty.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
