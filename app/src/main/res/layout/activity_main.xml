@@ -179,6 +179,29 @@
             android:textAllCaps="false"
             android:textColor="@color/colorwhite"/>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" From Dynamic Developers"
+                android:textColor="@color/blue_bg"
+                android:fontFamily="sans-serif-black"
+                android:clickable="true"
+                android:shadowColor="@color/clr_grey_text"
+                android:gravity="center_horizontal" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
+
+
 
 </LinearLayout>
