@@ -1,4 +1,4 @@
-package com.balkrishnashah.firebasechatmessenger;
+package com.balkrishnashah.firebasechatmessenger.authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.balkrishnashah.firebasechatmessenger.ChatLogActivty;
+import com.balkrishnashah.firebasechatmessenger.R;
+import com.balkrishnashah.firebasechatmessenger.user_creation.UserCreationActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -28,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String mobile=mPhoneNumber.getText().toString();
-                Intent intent=new Intent(MainActivity.this,VerifyPhoneNumber.class);
+                Intent intent=new Intent(MainActivity.this, VerifyPhoneNumber.class);
                 intent.putExtra("mobile",mobile);
                 startActivity(intent);
             }
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // User is signed in
-            Intent i = new Intent(getApplicationContext(), ChatLogActivty.class);
+            Intent i = new Intent(getApplicationContext(), UserCreationActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }

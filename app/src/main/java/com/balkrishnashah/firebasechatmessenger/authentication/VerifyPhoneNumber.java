@@ -1,4 +1,4 @@
-package com.balkrishnashah.firebasechatmessenger;
+package com.balkrishnashah.firebasechatmessenger.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balkrishnashah.firebasechatmessenger.ChatLogActivty;
+import com.balkrishnashah.firebasechatmessenger.R;
+import com.balkrishnashah.firebasechatmessenger.user_creation.UserCreationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
@@ -27,11 +30,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyPhoneNumber extends AppCompatActivity {
@@ -41,6 +44,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     private EditText mCode1,mCode2,mCode3,mCode4,mCode5,mCode6;
     private TextView mPhone_no;
     ProgressBar mProgressBar;
+    private String bNewUserFlag = "False";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +67,11 @@ public class VerifyPhoneNumber extends AppCompatActivity {
         mPhone_no.setText("+91"+mobile);
         sendVerificationCode(mobile);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     public void sendVerificationCode(String number) {
@@ -91,7 +100,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
             if(code!=null){
 
                 List<String> code_break = Collections.singletonList(code);
-                Toast.makeText(getApplicationContext(), "codebreak "+code_break, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "codebreak "+code_break, Toast.LENGTH_SHORT).show();
 //                mCode.setText(code);
                 int size = 1;
                 String[] tokens = code.split("(?<=\\G.{" + size + "})");
@@ -127,11 +136,33 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     public void verifyCode(String code){
         try{
             PhoneAuthCredential credential= PhoneAuthProvider.getCredential(mVerification,code);
+            checkForNewUser();
             signInWithPhone(credential);
         }catch (Exception e){
             Toast toast = Toast.makeText(getApplicationContext(), "Verification Code is wrong, try again", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
+        }
+    }
+
+    private void checkForNewUser(){
+
+        //check for new user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference("ChatMessenger").child("NewUser").child(user.getUid());
+            mUserDB.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        bNewUserFlag = "True";
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
         }
     }
 
@@ -145,28 +176,35 @@ public class VerifyPhoneNumber extends AppCompatActivity {
 
                             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             if (user != null) {
-                                final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference("ChatMessenger").child("user").child(user.getUid());
-                                mUserDB.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if (!snapshot.exists()) {
-                                            Map<String, Object> userMap = new HashMap<>();
-                                            userMap.put("phone", user.getPhoneNumber());
-                                            userMap.put("name", user.getDisplayName());
-                                            mUserDB.updateChildren(userMap);
+                                if (bNewUserFlag.contentEquals("False")){
+                                    final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference("ChatMessenger").child("NewUser").child(user.getUid());
+                                    mUserDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (!snapshot.exists()) {
+                                                Map<String, Object> userMap = new HashMap<>();
+                                                userMap.put("phone", user.getPhoneNumber());
+                                                userMap.put("name", user.getDisplayName());
+                                                mUserDB.updateChildren(userMap);
+                                            }
+                                            mProgressBar.setVisibility(View.GONE);
+                                            findViewById(R.id.verification_text).setVisibility(View.GONE);
+
+                                            Intent intent = new Intent(VerifyPhoneNumber.this, ChatLogActivty.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(intent);
                                         }
-                                        mProgressBar.setVisibility(View.GONE);
-                                        findViewById(R.id.verification_text).setVisibility(View.GONE);
 
-                                        Intent intent = new Intent(VerifyPhoneNumber.this, ChatLogActivty.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                    }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                        }
+                                    });
+                                }else {
+                                    Intent intent = new Intent(VerifyPhoneNumber.this, UserCreationActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-                                    }
-                                });
                             }
                         }
                     }

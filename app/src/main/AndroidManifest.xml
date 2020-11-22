@@ -9,9 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FirebaseChatMessenger">
-        <activity android:name=".ChatLogActivty"></activity>
-        <activity android:name=".VerifyPhoneNumber" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".user_creation.UserCreationActivity"></activity>
+        <activity android:name=".ChatLogActivty" />
+        <activity android:name=".authentication.VerifyPhoneNumber" />
+        <activity android:name=".authentication.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
