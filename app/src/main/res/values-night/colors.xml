@@ -44,6 +44,9 @@
     <color name="light_steel_blue">#e4f0f3</color>
     <color name="dark_turquoise">#00e9e3</color>
 
+    //chat
+    <color name="chat_background">#e6e6e6</color>
+
 
 
 

@@ -177,7 +177,8 @@
             android:text="Send OTP"
             android:layout_marginHorizontal="60dp"
             android:textAllCaps="false"
-            android:textColor="@color/colorwhite"/>
+            android:textColor="@color/colorwhite"
+            android:backgroundTint="@color/colorPrimaryDark"/>
 
 
         <LinearLayout

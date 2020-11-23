@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.balkrishnashah.firebasechatmessenger.ChatLogActivty;
 import com.balkrishnashah.firebasechatmessenger.R;
 import com.balkrishnashah.firebasechatmessenger.user_creation.UserCreationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,7 +33,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyPhoneNumber extends AppCompatActivity {
@@ -176,7 +174,6 @@ public class VerifyPhoneNumber extends AppCompatActivity {
 
                             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             if (user != null) {
-                                if (bNewUserFlag.contentEquals("False")){
                                     final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference("ChatMessenger").child("NewUser").child(user.getUid());
                                     mUserDB.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
@@ -190,7 +187,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
                                             mProgressBar.setVisibility(View.GONE);
                                             findViewById(R.id.verification_text).setVisibility(View.GONE);
 
-                                            Intent intent = new Intent(VerifyPhoneNumber.this, ChatLogActivty.class);
+                                            Intent intent = new Intent(VerifyPhoneNumber.this, UserCreationActivity.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(intent);
                                         }
@@ -199,15 +196,15 @@ public class VerifyPhoneNumber extends AppCompatActivity {
                                         public void onCancelled(@NonNull DatabaseError error) {
                                         }
                                     });
-                                }else {
-                                    Intent intent = new Intent(VerifyPhoneNumber.this, UserCreationActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
                                 }
+//                                else {
+//                                    Intent intent = new Intent(VerifyPhoneNumber.this, ChatLogActivty.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(intent);
+//                                }
 
                             }
                         }
-                    }
                 });
 
     }

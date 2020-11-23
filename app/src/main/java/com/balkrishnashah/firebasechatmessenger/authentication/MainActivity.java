@@ -7,9 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.balkrishnashah.firebasechatmessenger.ChatLogActivty;
+import com.balkrishnashah.firebasechatmessenger.message.ChatLogActivty;
 import com.balkrishnashah.firebasechatmessenger.R;
-import com.balkrishnashah.firebasechatmessenger.user_creation.UserCreationActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // User is signed in
-            Intent i = new Intent(getApplicationContext(), UserCreationActivity.class);
+            Intent i = new Intent(getApplicationContext(), ChatLogActivty.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }

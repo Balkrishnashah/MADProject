@@ -9,16 +9,16 @@
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:background="@color/colorPrimaryDark">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Design Yourself"
-            android:layout_gravity="center"
+            android:text="Welcome, to Bchat"
             android:textColor="@color/white"
-            android:textSize="24sp"/>
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-medium"/>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -26,6 +26,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_margin="10dp"
         android:orientation="horizontal">
 
@@ -34,7 +35,10 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:src="@drawable/add_user_1"
-
+            app:civ_border_color="@color/black"
+            app:civ_border_width="1dp"
+            android:clickable="true"
+            android:scaleType="centerCrop"
             />
 
         <EditText
@@ -43,14 +47,54 @@
             android:id="@+id/username"
             android:textSize="18sp"
             android:layout_marginLeft="25dp"
-            android:textColor="#fff"
+            android:textColor="#000"
             android:textStyle="bold"
             android:hint="enter your name"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="50dp"
+            />
 
     </LinearLayout>
 
 
+    <Button
+        android:id="@+id/continue_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="continue"
+        android:backgroundTint="@color/midnight_blue"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/second_ll"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/creating_profile_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="   Please wait \n We are creating your profile"
+            android:textColor="@color/blue"
+            android:textSize="24sp"
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:gravity="center"/>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>
