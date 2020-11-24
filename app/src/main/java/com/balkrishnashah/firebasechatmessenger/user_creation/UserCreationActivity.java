@@ -48,7 +48,7 @@ public class UserCreationActivity extends AppCompatActivity implements View.OnCl
     private EditText bUserName;
     private Button bContinue,bSignOut;
     public static final int PICK_IMAGE = 1;
-    private Uri selectedImageUri;
+    private Uri selectedImageUri = Uri.parse("default");
     private TextView mTextView;
     private ProgressBar mProgressBar;
 

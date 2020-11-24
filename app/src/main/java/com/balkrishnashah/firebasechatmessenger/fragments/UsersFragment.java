@@ -126,7 +126,7 @@ public class UsersFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
                         assert user != null;
-                        Log.d("UsersFragment",user.getDisplayName());
+                        Log.d("UsersFragment",""+user.getDisplayName());
                         if (user.getUserId() != null && !user.getUserId().equals(firebaseUser.getUid())) {
                             mUsers.add(user);
                         }
@@ -154,7 +154,7 @@ public class UsersFragment extends Fragment {
                     Log.d("UserFragment","enter in find user function");
                     User display_user = datasnapshot.getValue(User.class);
                     assert display_user != null;
-                    Log.d("UsersFragment",display_user.getDisplayName());
+                    Log.d("UsersFragment",""+display_user.getDisplayName());
                     if (display_user.getUserId() != null && !display_user.getUserId().equals(firebaseUser.getUid())) {
                         chatUsers.add(display_user);
                     }

@@ -134,7 +134,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
     public void verifyCode(String code){
         try{
             PhoneAuthCredential credential= PhoneAuthProvider.getCredential(mVerification,code);
-            checkForNewUser();
+//            checkForNewUser();
             signInWithPhone(credential);
         }catch (Exception e){
             Toast toast = Toast.makeText(getApplicationContext(), "Verification Code is wrong, try again", Toast.LENGTH_SHORT);
@@ -197,12 +197,7 @@ public class VerifyPhoneNumber extends AppCompatActivity {
                                         }
                                     });
                                 }
-//                                else {
-//                                    Intent intent = new Intent(VerifyPhoneNumber.this, ChatLogActivty.class);
-//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                    startActivity(intent);
-//                                }
-
+//
                             }
                         }
                 });
