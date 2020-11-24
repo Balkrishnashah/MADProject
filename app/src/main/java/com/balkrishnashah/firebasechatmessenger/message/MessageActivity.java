@@ -21,6 +21,7 @@ import com.balkrishnashah.firebasechatmessenger.Adapter.MessageAdapter;
 import com.balkrishnashah.firebasechatmessenger.Model.Chat;
 import com.balkrishnashah.firebasechatmessenger.Model.ChatUser;
 import com.balkrishnashah.firebasechatmessenger.R;
+import com.balkrishnashah.firebasechatmessenger.user_creation.User;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -141,10 +142,10 @@ public class MessageActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ChatUser chatUser = dataSnapshot.getValue(ChatUser.class);
+                User chatUser = dataSnapshot.getValue(User.class);
                 assert chatUser != null;
-                username.setText(chatUser.getUsername());
-                Glide.with(getApplicationContext()).load(chatUser.getImageURL()).into(profile_image);
+                username.setText(chatUser.getDisplayName());
+                Glide.with(getApplicationContext()).load(chatUser.getProfileImageUrl()).into(profile_image);
 //                profile_image.setImageResource(R.mipmap.ic_launcher);
 //                if (user.getImageURL().equals("default")){
 //                    profile_image.setImageResource(R.mipmap.ic_launcher);
@@ -152,7 +153,7 @@ public class MessageActivity extends AppCompatActivity {
 //                    //and this
 //                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
 //                }
-                readMesagges(fuser.getUid(), userid, chatUser.getImageURL());
+                readMesagges(fuser.getUid(), userid, chatUser.getProfileImageUrl());
             }
 
             @Override
