@@ -1,4 +1,4 @@
-package com.balkrishnashah.firebasechatmessenger.fragments;
+package com.balkrishnashah.firebasechatmessenger.new_messeges.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,13 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.balkrishnashah.firebasechatmessenger.Adapter.UserAdapter;
 import com.balkrishnashah.firebasechatmessenger.Model.Chatlist;
-//import com.balkrishnashah.firebasechatmessenger.Notifications.Token;
 import com.balkrishnashah.firebasechatmessenger.R;
 import com.balkrishnashah.firebasechatmessenger.user_creation.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,14 +22,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ChatsFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
@@ -41,15 +38,18 @@ public class ChatsFragment extends Fragment {
 
     private List<Chatlist> usersList;
 
+    public ChatFragment() {
+    }
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chats, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.new_chat_fragment, container, false);
 
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
         usersList = new ArrayList<>();
@@ -73,16 +73,8 @@ public class ChatsFragment extends Fragment {
             }
         });
 
-        updateToken(FirebaseInstanceId.getInstance().getToken());
-
-
         return view;
-    }
 
-    private void updateToken(String token){
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ChatMessenger/Tokens");
-//        Token token1 = new Token(token);
-//        reference.child(fuser.getUid()).setValue(token1);
     }
 
     private void chatList() {
@@ -111,5 +103,4 @@ public class ChatsFragment extends Fragment {
             }
         });
     }
-
 }

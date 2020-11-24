@@ -55,10 +55,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.username.setText(user.getDisplayName());
         holder.profile_image.setImageResource(R.mipmap.ic_launcher);
         Glide.with(mContext).asBitmap().load(user.getProfileImageUrl()).into(holder.profile_image);
-//        if (user.getImageURL().equals("default")){
-//            holder.profile_image.setImageResource(R.mipmap.ic_launcher);
+//        if (user.getProfileImageUrl().equals("")){
+//            holder.profile_image.setImageResource(R.drawable.user_default);
 //        } else {
-//            Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
+//            Glide.with(mContext).load(user.getProfileImageUrl()).into(holder.profile_image);
 //        }
 
         if (ischat){
@@ -118,7 +118,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private void lastMessage(final String userid, final TextView last_msg){
         theLastMessage = "default";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users/Chats");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ChatMessenger/Chats");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override

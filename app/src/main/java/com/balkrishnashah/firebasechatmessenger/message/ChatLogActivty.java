@@ -64,6 +64,7 @@ public class ChatLogActivty extends AppCompatActivity {
         final TabLayout tabLayout = findViewById(R.id.tab_layout);
         final ViewPager viewPager = findViewById(R.id.view_pager);
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("ChatMessenger/Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -115,14 +116,14 @@ public class ChatLogActivty extends AppCompatActivity {
     private void fetchUserData(){
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference("ChatMessenger").child("BchatUser").child(user.getPhoneNumber());
+            final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference("ChatMessenger/BchatUser").child(user.getPhoneNumber());
             mUserDB.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                            User mUser = new User();
-                            mUser = snapshot.getValue(User.class);
+                            User mUser = snapshot.getValue(User.class);
+//                            mUser = snapshot.getValue(User.class);
                             assert mUser != null;
                             mDisplayName.setText(mUser.getDisplayName());
                             Glide.with(getApplicationContext()).asBitmap().load(mUser.getProfileImageUrl()).into(mCircleImageView);
@@ -171,7 +172,7 @@ public class ChatLogActivty extends AppCompatActivity {
     }
 
     private void status(String status){
-        reference = FirebaseDatabase.getInstance().getReference("ChatMessenger/BchatUser").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        reference = FirebaseDatabase.getInstance().getReference("ChatMessenger/BchatUser").child(firebaseUser.getPhoneNumber());
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);

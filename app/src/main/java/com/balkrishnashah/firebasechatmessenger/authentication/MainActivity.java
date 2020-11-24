@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.balkrishnashah.firebasechatmessenger.message.ChatLogActivty;
 import com.balkrishnashah.firebasechatmessenger.R;
+import com.balkrishnashah.firebasechatmessenger.new_messeges.MainChatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         mPhoneNumber = findViewById(R.id.enterYourPhone);
         mAuth=FirebaseAuth.getInstance();
 
-
         findViewById(R.id.sendOtpBtnId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     @Override

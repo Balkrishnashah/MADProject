@@ -3,6 +3,7 @@ package com.balkrishnashah.firebasechatmessenger.fragments;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.balkrishnashah.firebasechatmessenger.Adapter.UserAdapter;
 import com.balkrishnashah.firebasechatmessenger.R;
+import com.balkrishnashah.firebasechatmessenger.new_messeges.adapter.ChatUserAdapter;
 import com.balkrishnashah.firebasechatmessenger.user_creation.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,7 +38,7 @@ public class UsersFragment extends Fragment {
 
     private UserAdapter userAdapter;
     private List<User> mUsers;
-
+    private List<User> chatUsers;
     EditText search_users;
 
 
@@ -53,6 +55,8 @@ public class UsersFragment extends Fragment {
         mUsers = new ArrayList<>();
 
         readUsers();
+        chatUsers = new ArrayList<>();
+        findUsers();
 
         search_users = view.findViewById(R.id.search_users);
         search_users.addTextChangedListener(new TextWatcher() {
@@ -121,8 +125,8 @@ public class UsersFragment extends Fragment {
                     mUsers.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
-
                         assert user != null;
+                        Log.d("UsersFragment",user.getDisplayName());
                         if (user.getUserId() != null && !user.getUserId().equals(firebaseUser.getUid())) {
                             mUsers.add(user);
                         }
@@ -134,6 +138,33 @@ public class UsersFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void findUsers(){
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ChatMessenger/BchatUser");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot datasnapshot : snapshot.getChildren()) {
+//                    Toast.makeText(getContext(), "enter in find user", Toast.LENGTH_SHORT).show();
+                    Log.d("UserFragment","enter in find user function");
+                    User display_user = datasnapshot.getValue(User.class);
+                    assert display_user != null;
+                    Log.d("UsersFragment",display_user.getDisplayName());
+                    if (display_user.getUserId() != null && !display_user.getUserId().equals(firebaseUser.getUid())) {
+                        chatUsers.add(display_user);
+                    }
+                    ChatUserAdapter mChatUserAdapter = new ChatUserAdapter(chatUsers ,getContext());
+                    recyclerView.setAdapter(mChatUserAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });

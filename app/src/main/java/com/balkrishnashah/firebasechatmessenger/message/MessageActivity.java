@@ -17,14 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.balkrishnashah.firebasechatmessenger.Adapter.MessageAdapter;
-import com.balkrishnashah.firebasechatmessenger.fragments.APIService;
+
 import com.balkrishnashah.firebasechatmessenger.Model.Chat;
 import com.balkrishnashah.firebasechatmessenger.Model.ChatUser;
-import com.balkrishnashah.firebasechatmessenger.Notifications.Client;
-import com.balkrishnashah.firebasechatmessenger.Notifications.Data;
-import com.balkrishnashah.firebasechatmessenger.Notifications.MyResponse;
-import com.balkrishnashah.firebasechatmessenger.Notifications.Sender;
-import com.balkrishnashah.firebasechatmessenger.Notifications.Token;
 import com.balkrishnashah.firebasechatmessenger.R;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,7 +62,6 @@ public class MessageActivity extends AppCompatActivity {
 
     String userid;
     RelativeLayout relativeLayout;
-    APIService apiService;
     String ab;
     boolean notify = false;
     SharedPreferences sharedPreferences;
@@ -90,7 +84,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+//        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -99,7 +93,7 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         relativeLayout=findViewById(R.id.chatbackground);
-        sharedPreferences=getSharedPreferences("Wayezi",MODE_PRIVATE);
+        sharedPreferences=getSharedPreferences("Bchat",MODE_PRIVATE);
         String ab=sharedPreferences.getString("chatbackground","none");
         if(ab.equals("back1")){
             relativeLayout.setBackground(getResources().getDrawable(R.drawable.back1));
@@ -238,7 +232,7 @@ public class MessageActivity extends AppCompatActivity {
                 ChatUser chatUser = dataSnapshot.getValue(ChatUser.class);
                 if (notify) {
                     assert chatUser != null;
-                    sendNotifiaction(receiver, chatUser.getUsername(), msg);
+//                    sendNotifiaction(receiver, chatUser.getUsername(), msg);
                 }
                 notify = false;
             }
@@ -250,42 +244,7 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    private void sendNotifiaction(String receiver, final String username, final String message){
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("ChatMessenger/Tokens");
-        Query query = tokens.orderByKey().equalTo(receiver);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message", userid);
 
-                    Sender sender = new Sender(data, token.getToken());
-
-                    apiService.sendNotification(sender)
-                            .enqueue(new Callback<MyResponse>() {
-                                @Override
-                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                                    if (response.code() == 200){
-                                        if (response.body().success != 1){
-                                            Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<MyResponse> call, Throwable t) {
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void readMesagges(final String myid, final String userid, final String imageurl){
         mchat = new ArrayList<>();
@@ -297,6 +256,7 @@ public class MessageActivity extends AppCompatActivity {
                 mchat.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
+                    assert chat != null;
                     if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
                             chat.getReceiver().equals(userid) && chat.getSender().equals(myid)){
                         mchat.add(chat);
